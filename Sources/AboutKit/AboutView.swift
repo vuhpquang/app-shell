@@ -35,7 +35,7 @@ public struct AboutView: View {
                 .resizable()
                 .interpolation(.high)
                 .frame(width: ShellTokens.Size.aboutIcon, height: ShellTokens.Size.aboutIcon)
-                .accessibilityLabel(Text("\(app.name) icon", bundle: .module))
+                .accessibilityLabel(Text("\(app.name) icon"))
 
             VStack(spacing: ShellTokens.Spacing.xs) {
                 Text(verbatim: app.name).font(.title.bold())
@@ -44,7 +44,7 @@ public struct AboutView: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
-                Text("Version \(app.version) (\(app.build))", bundle: .module)
+                Text("Version \(app.version) (\(app.build))")
                     .font(.callout.monospacedDigit())
                     .foregroundStyle(.secondary)
                     .textSelection(.enabled)
@@ -63,8 +63,8 @@ public struct AboutView: View {
             }
 
             HStack(spacing: ShellTokens.Spacing.s) {
-                Button { whatsNew() } label: { Text("What's New", bundle: .module) }
-                Button { openURL(app.newIssueURL) } label: { Text("Report Issue", bundle: .module) }
+                Button { whatsNew() } label: { Text("What's New") }
+                Button { openURL(app.newIssueURL) } label: { Text("Report Issue") }
             }
             .padding(.top, ShellTokens.Spacing.l)
 
@@ -97,7 +97,7 @@ public struct AuthorFooter: View {
     public var body: some View {
         VStack(spacing: ShellTokens.Spacing.xs) {
             HStack(spacing: ShellTokens.Spacing.xs) {
-                Text("Made by", bundle: .module).foregroundStyle(.secondary)
+                Text("Made by").foregroundStyle(.secondary)
                 Link(Author.name, destination: Author.website).fontWeight(.semibold)
             }
             HStack(spacing: ShellTokens.Spacing.s) {
@@ -107,7 +107,7 @@ public struct AuthorFooter: View {
                 Text(verbatim: "·").foregroundStyle(.tertiary)
                 Link(destination: Author.linkedIn) { Text(verbatim: "LinkedIn") }
                 Text(verbatim: "·").foregroundStyle(.tertiary)
-                Link(destination: app.repoURL) { Text("Source code", bundle: .module) }
+                Link(destination: app.repoURL) { Text("Source code") }
             }
             ForEach(app.credits, id: \.name) { credit in
                 HStack(spacing: ShellTokens.Spacing.xs) {

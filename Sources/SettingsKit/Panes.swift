@@ -21,7 +21,7 @@ public struct UpdatesPane: View {
                     UpdateActionButton(updater: updater)
                 }
                 if let checked = updater.lastChecked {
-                    Text("Last checked \(checked.formatted(.relative(presentation: .named)))", bundle: .module)
+                    Text("Last checked \(checked.formatted(.relative(presentation: .named)))")
                         .font(.callout)
                         .foregroundStyle(.secondary)
                 }
@@ -34,16 +34,16 @@ public struct UpdatesPane: View {
             }
             Section {
                 Toggle(isOn: Binding(get: { autoCheck }, set: { autoCheck = $0; updater.settings.autoCheck = $0 })) {
-                    Text("Check for updates automatically", bundle: .module)
+                    Text("Check for updates automatically")
                 }
                 if updater.settings.supportsAutoInstall {
                     Toggle(isOn: Binding(get: { autoInstall }, set: { autoInstall = $0; updater.settings.autoInstall = $0 })) {
-                        Text("Install updates automatically", bundle: .module)
+                        Text("Install updates automatically")
                     }
                     .disabled(!autoCheck)
                 }
             } footer: {
-                Text("Updates come from the app's GitHub releases.", bundle: .module)
+                Text("Updates come from the app's GitHub releases.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }
@@ -92,7 +92,7 @@ public struct LaunchAtLoginRow: View {
             error = LaunchAtLogin.set(on)
             enabled = LaunchAtLogin.isEnabled
         })) {
-            Text("Open \(appName) at login", bundle: .module)
+            Text("Open \(appName) at login")
             if let error {
                 Text(error).foregroundStyle(.red)
             }

@@ -42,6 +42,6 @@ public final class WhatsNewTracker: ObservableObject {
 
     /// "What's New in 1.5.0" while there is something to show, for `.menuItem` apps.
     public var menuTitle: String? {
-        pendingVersion.map { String(localized: "What's New in \($0)", bundle: .module) }
+        pendingVersion.map { String(localized: "What's New in \($0)") }
     }
 }

@@ -77,10 +77,10 @@ public struct SettingsShell: View {
     var allPanes: [SettingsPane] {
         var all = panes
         if let updater {
-            all.append(SettingsPane(id: Self.updatesPaneID, title: String(localized: "Updates", bundle: .module),
+            all.append(SettingsPane(id: Self.updatesPaneID, title: String(localized: "Updates"),
                                     systemImage: "arrow.down.circle") { UpdatesPane(updater: updater) })
         }
-        all.append(SettingsPane(id: Self.aboutPaneID, title: String(localized: "About", bundle: .module),
+        all.append(SettingsPane(id: Self.aboutPaneID, title: String(localized: "About"),
                                 systemImage: "info.circle") {
             AboutPane(app: app, updater: updater, onWhatsNew: onWhatsNew)
         })

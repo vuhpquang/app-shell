@@ -33,7 +33,7 @@ public enum AboutWindow {
     private static let host = ShellWindow()
 
     public static func show(app: AppIdentity, updater: Updater?, onWhatsNew: (() -> Void)? = nil) {
-        host.show(title: String(localized: "About \(app.name)", bundle: .module)) {
+        host.show(title: String(localized: "About \(app.name)")) {
             AboutView(app: app, updater: updater, onWhatsNew: onWhatsNew)
         }
     }
@@ -58,7 +58,7 @@ public struct WhatsNewView: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("What's New in \(app.name) \(version)", bundle: .module)
+            Text("What's New in \(app.name) \(version)")
                 .font(.title2.bold())
                 .padding(.bottom, ShellTokens.Spacing.m)
             ScrollView {
@@ -69,19 +69,18 @@ public struct WhatsNewView: View {
                     case .loaded(let notes) where !notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty:
                         ReleaseNotesView(markdown: notes)
                     case .loaded:
-                        Text("This version has no release notes.", bundle: .module).foregroundStyle(.secondary)
+                        Text("This version has no release notes.").foregroundStyle(.secondary)
                     case .failed:
-                        Text("Couldn't load the release notes. Check your connection, or read them on GitHub.",
-                             bundle: .module)
+                        Text("Couldn't load the release notes. Check your connection, or read them on GitHub.")
                             .foregroundStyle(.secondary)
                     }
                 }
                 .padding(.vertical, ShellTokens.Spacing.xs)
             }
             HStack {
-                Button { openURL(app.releaseURL(tag: "v\(version)")) } label: { Text("View on GitHub", bundle: .module) }
+                Button { openURL(app.releaseURL(tag: "v\(version)")) } label: { Text("View on GitHub") }
                 Spacer()
-                Button { dismiss(); NSApp.keyWindow?.performClose(nil) } label: { Text("Done", bundle: .module) }
+                Button { dismiss(); NSApp.keyWindow?.performClose(nil) } label: { Text("Done") }
                     .keyboardShortcut(.defaultAction)
             }
             .padding(.top, ShellTokens.Spacing.m)
@@ -107,7 +106,7 @@ public enum WhatsNewWindow {
 
     public static func show(app: AppIdentity, version: String, tracker: WhatsNewTracker? = nil) {
         tracker?.markSeen()
-        host.show(title: String(localized: "What's New", bundle: .module)) {
+        host.show(title: String(localized: "What's New")) {
             WhatsNewView(app: app, version: version)
         }
     }

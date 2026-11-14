@@ -11,19 +11,19 @@ public struct UpdateStatusLabel: View {
     public var body: some View {
         switch updater.state {
         case .idle:
-            Text("Not checked yet", bundle: .module).foregroundStyle(.secondary)
+            Text("Not checked yet").foregroundStyle(.secondary)
         case .checking:
-            Text("Checking for updates…", bundle: .module).foregroundStyle(.secondary)
+            Text("Checking for updates…").foregroundStyle(.secondary)
         case .upToDate:
-            Label { Text("\(updater.app.name) is up to date", bundle: .module) }
+            Label { Text("\(updater.app.name) is up to date") }
                 icon: { Image(systemName: "checkmark.circle.fill").foregroundStyle(.green) }
         case .available(let version):
-            Label { Text("Version \(version) is available", bundle: .module) }
+            Label { Text("Version \(version) is available") }
                 icon: { Image(systemName: "arrow.down.circle.fill").foregroundStyle(Color.accentColor) }
         case .downloading:
-            Text("Downloading…", bundle: .module).foregroundStyle(.secondary)
+            Text("Downloading…").foregroundStyle(.secondary)
         case .installing:
-            Text("Installing…", bundle: .module).foregroundStyle(.secondary)
+            Text("Installing…").foregroundStyle(.secondary)
         case .failed(let message):
             Label { Text(message) }
                 icon: { Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange) }
@@ -40,12 +40,12 @@ public struct UpdateActionButton: View {
     public var body: some View {
         switch updater.state {
         case .available:
-            Button { updater.install() } label: { Text("Install Update", bundle: .module) }
+            Button { updater.install() } label: { Text("Install Update") }
                 .buttonStyle(.borderedProminent)
         case .checking, .downloading, .installing:
             ProgressView().controlSize(.small)
         default:
-            Button { updater.check(userInitiated: true) } label: { Text("Check for Updates", bundle: .module) }
+            Button { updater.check(userInitiated: true) } label: { Text("Check for Updates") }
         }
     }
 }

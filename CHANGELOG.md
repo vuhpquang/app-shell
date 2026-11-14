@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 — 2026-11-14
+
+- No resource bundles any more: SwiftPM-built apps (LaunchApp, Padlet) don't ship them, so
+  `Bundle.module` would crash once the build folder was gone; Xcode apps (ZenTask) failed to sign them.
+
 ## 0.1.0 — 2026-11-14
 
 First version, adopted by LaunchApp, Padlet and ZenTask.

@@ -44,7 +44,10 @@ In an app's DEBUG build, `APPSHELL_PRETEND_VERSION=0.0.1` makes the updater see 
 - Per-app differences come in as values (`AppIdentity`, `AssetMatcher`, `UpdateSettingsStore`,
   `SettingsShellStyle`). Never branch on which app is running.
 - `ObservableObject`, not `@Observable` (macOS 13). macOS 14+/26 APIs only behind `if #available`.
-- User-facing strings use `String(localized:bundle: .module)` / `Text(_:bundle: .module)`.
+- **No resources in the package** (no `resources:`, no `Bundle.module`). LaunchApp and Padlet copy only the
+  executable into their `.app`, so a SwiftPM resource bundle would be missing at runtime (`Bundle.module`
+  then crashes once `.build` is gone), and Xcode apps fail to sign the bundles with a named identity.
+  Strings are plain English literals; images come from SF Symbols or the app's own bundle.
 - Never weaken update verification. Changing `Installer` means re-running the live tests for a DMG app and
   the zip app.
 - A change here ships nowhere until an app bumps its submodule: commit + push here (tag `vX.Y.Z` for

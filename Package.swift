@@ -7,7 +7,6 @@ import PackageDescription
 
 let package = Package(
     name: "AppShell",
-    defaultLocalization: "en",
     platforms: [.macOS(.v13)],
     products: [
         .library(name: "AppShellCore", targets: ["AppShellCore"]),
@@ -18,9 +17,8 @@ let package = Package(
     targets: [
         .target(name: "AppShellCore"),
         .target(name: "UpdaterKit", dependencies: ["AppShellCore"]),
-        .target(name: "AboutKit", dependencies: ["AppShellCore", "UpdaterKit"], resources: [.process("Resources")]),
-        .target(name: "SettingsKit", dependencies: ["AppShellCore", "UpdaterKit", "AboutKit"],
-                resources: [.process("Resources")]),
+        .target(name: "AboutKit", dependencies: ["AppShellCore", "UpdaterKit"]),
+        .target(name: "SettingsKit", dependencies: ["AppShellCore", "UpdaterKit", "AboutKit"]),
         // Dev-only renderer for design checks (`swift run AppShellPreview <dir>`); not a product.
         .executableTarget(name: "AppShellPreview", dependencies: ["AboutKit", "SettingsKit"]),
         .testTarget(name: "AppShellCoreTests", dependencies: ["AppShellCore"]),

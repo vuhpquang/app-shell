@@ -38,7 +38,7 @@ public final class Updater: ObservableObject {
     @Published public private(set) var lastChecked: Date?
     @Published public private(set) var releaseNotes = ""
 
-    public let app: AppInfo
+    public let app: AppIdentity
     public let matcher: AssetMatcher
     public let settings: UpdateSettingsStore
 
@@ -57,7 +57,7 @@ public final class Updater: ObservableObject {
     private var startTask: Task<Void, Never>?
     private var settingsSubscription: AnyCancellable?
 
-    public init(app: AppInfo, matcher: AssetMatcher, settings: UpdateSettingsStore,
+    public init(app: AppIdentity, matcher: AssetMatcher, settings: UpdateSettingsStore,
                 transport: UpdateTransport = URLSessionTransport(), installer: Installing = Installer()) {
         self.app = app
         self.matcher = matcher

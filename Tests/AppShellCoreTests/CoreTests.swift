@@ -42,9 +42,9 @@ final class VersionTests: XCTestCase {
     }
 }
 
-final class AppInfoTests: XCTestCase {
+final class AppIdentityTests: XCTestCase {
     func testURLs() {
-        let app = AppInfo(name: "LaunchApp", tagline: "t", repo: "vuhpquang/launch-app", firstYear: 2026)
+        let app = AppIdentity(name: "LaunchApp", tagline: "t", repo: "vuhpquang/launch-app", firstYear: 2026)
         XCTAssertEqual(app.repoURL.absoluteString, "https://github.com/vuhpquang/launch-app")
         XCTAssertEqual(app.releasesURL.absoluteString, "https://github.com/vuhpquang/launch-app/releases")
         XCTAssertEqual(app.newIssueURL.absoluteString, "https://github.com/vuhpquang/launch-app/issues/new")

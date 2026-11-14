@@ -5,7 +5,7 @@ one self-updater from GitHub Releases, one About window and What's New, one Sett
 
 | Product | What it gives an app |
 |---|---|
-| `AppShellCore` | `Author`, `AppInfo`, version compare, `LaunchAtLogin` |
+| `AppShellCore` | `Author`, `AppIdentity`, version compare, `LaunchAtLogin` |
 | `UpdaterKit` | `Updater`: check GitHub Releases, download DMG/zip, verify, swap, relaunch |
 | `AboutKit` | `AboutView`, `AboutWindow`, `WhatsNewTracker`, `WhatsNewWindow` |
 | `SettingsKit` | `SettingsShell` (sidebar + grouped forms, Updates + About panes), `LaunchAtLoginRow` |

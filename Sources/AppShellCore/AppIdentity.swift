@@ -24,7 +24,7 @@ public struct Credit: Sendable, Equatable {
 }
 
 /// Everything the shared shell needs to know about one app. Filled once per app.
-public struct AppInfo: Sendable {
+public struct AppIdentity: Sendable {
     public var name: String
     /// One line in the app's own words.
     public var tagline: String

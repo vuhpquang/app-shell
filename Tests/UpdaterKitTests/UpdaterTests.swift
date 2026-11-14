@@ -43,7 +43,7 @@ private final class MemorySettings: UpdateSettingsStore {
 @MainActor
 final class UpdaterTests: XCTestCase {
     private let release = try! Release.decode(Data(ReleaseTests.json.utf8))
-    private let app = AppInfo(name: "LaunchApp", tagline: "t", repo: "vuhpquang/launch-app", firstYear: 2026)
+    private let app = AppIdentity(name: "LaunchApp", tagline: "t", repo: "vuhpquang/launch-app", firstYear: 2026)
 
     private func updater(_ transport: FakeTransport, _ installer: FakeInstaller = FakeInstaller(),
                          settings: MemorySettings = MemorySettings()) -> Updater {

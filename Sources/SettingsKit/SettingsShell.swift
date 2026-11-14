@@ -98,6 +98,7 @@ public struct SettingsShell: View {
         NavigationSplitView {
             sidebar(all, current: current)
                 .navigationSplitViewColumnWidth(style.sidebarWidth)
+                .modifier(NoSidebarToggle())
         } detail: {
             current.content
                 .scrollContentBackground(style.detailBackground == nil ? .automatic : .hidden)
@@ -132,6 +133,17 @@ public struct SettingsShell: View {
             } else {
                 Image(systemName: pane.systemImage)
             }
+        }
+    }
+}
+
+/// A Settings sidebar is always shown: no collapse button (macOS 14+ API).
+private struct NoSidebarToggle: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 14.0, *) {
+            content.toolbar(removing: .sidebarToggle)
+        } else {
+            content
         }
     }
 }

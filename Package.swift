@@ -18,8 +18,9 @@ let package = Package(
     targets: [
         .target(name: "AppShellCore"),
         .target(name: "UpdaterKit", dependencies: ["AppShellCore"]),
-        .target(name: "AboutKit", dependencies: ["AppShellCore", "UpdaterKit"]),
-        .target(name: "SettingsKit", dependencies: ["AppShellCore", "UpdaterKit", "AboutKit"]),
+        .target(name: "AboutKit", dependencies: ["AppShellCore", "UpdaterKit"], resources: [.process("Resources")]),
+        .target(name: "SettingsKit", dependencies: ["AppShellCore", "UpdaterKit", "AboutKit"],
+                resources: [.process("Resources")]),
         .testTarget(name: "AppShellCoreTests", dependencies: ["AppShellCore"]),
         .testTarget(name: "UpdaterKitTests", dependencies: ["UpdaterKit"]),
         .testTarget(name: "AboutKitTests", dependencies: ["AboutKit"]),

@@ -21,6 +21,8 @@ let package = Package(
         .target(name: "AboutKit", dependencies: ["AppShellCore", "UpdaterKit"], resources: [.process("Resources")]),
         .target(name: "SettingsKit", dependencies: ["AppShellCore", "UpdaterKit", "AboutKit"],
                 resources: [.process("Resources")]),
+        // Dev-only renderer for design checks (`swift run AppShellPreview <dir>`); not a product.
+        .executableTarget(name: "AppShellPreview", dependencies: ["AboutKit", "SettingsKit"]),
         .testTarget(name: "AppShellCoreTests", dependencies: ["AppShellCore"]),
         .testTarget(name: "UpdaterKitTests", dependencies: ["UpdaterKit"]),
         .testTarget(name: "AboutKitTests", dependencies: ["AboutKit"]),

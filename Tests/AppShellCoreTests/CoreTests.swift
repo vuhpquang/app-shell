@@ -61,4 +61,11 @@ final class AppIdentityTests: XCTestCase {
         XCTAssertEqual(app.releaseURL(version: "0.1.0").absoluteString,
                        "https://github.com/vuhpquang/app-depot/releases/tag/macos-v0.1.0")
     }
+
+    func testUpdateSourceDescriptionDefaultsToGitHubAndCanBeOverridden() {
+        var app = AppIdentity(name: "X", tagline: "t", repo: "a/b", firstYear: 2026)
+        XCTAssertEqual(app.updateSourceDescription, "Updates come from the app's GitHub releases.")
+        app.updateSourceDescription = "Updates come from the catalog."
+        XCTAssertEqual(app.updateSourceDescription, "Updates come from the catalog.")
+    }
 }

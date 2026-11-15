@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.4 — 2026-11-15
+
+- `AppIdentity.updateSourceDescription`: the footer of Settings → Updates is a value. The default is
+  unchanged ("Updates come from the app's GitHub releases."); App Depot sets its own.
+
 ## 0.2.3 — 2026-11-15
 
 - `AppIdentity.tagPrefix` (default "v") and `releaseURL(version:)`: What's New's "View on GitHub" and its

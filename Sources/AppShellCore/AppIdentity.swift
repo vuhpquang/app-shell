@@ -41,6 +41,10 @@ public struct AppIdentity: Sendable {
     /// Release tags are `<tagPrefix><version>`: "v" by default; a repo with several apps uses its own
     /// (App Depot: "macos-v").
     public var tagPrefix: String = "v"
+    /// The footer of Settings → Updates: where updates come from. Apps that update from somewhere other
+    /// than their GitHub releases (App Depot: the catalog) set their own sentence.
+    public var updateSourceDescription: String = AppIdentity.defaultUpdateSourceDescription
+    public static let defaultUpdateSourceDescription = "Updates come from the app's GitHub releases."
 
     public init(name: String, tagline: String, repo: String, firstYear: Int, accent: Color? = nil,
                 credits: [Credit] = [], whatsNew: WhatsNewMode = .menuItem, bundleURL: URL = Bundle.main.bundleURL) {

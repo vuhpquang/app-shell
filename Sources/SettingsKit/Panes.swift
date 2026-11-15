@@ -43,7 +43,7 @@ public struct UpdatesPane: View {
                     .disabled(!autoCheck)
                 }
             } footer: {
-                Text("Updates come from the app's GitHub releases.")
+                Text(updater.app.updateSourceDescription)
                     .font(.callout)
                     .foregroundStyle(.secondary)
             }

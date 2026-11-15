@@ -52,6 +52,29 @@ func render<V: View>(_ name: String, size: CGSize, _ view: V) {
     }
 }
 
+/// The About window as it really opens: a hosting view at its fitting size (no fixed frame).
+/// Fails loudly if the content is not exactly `aboutWidth` wide (it once collapsed to ~170 pt).
+@MainActor
+func renderNatural<V: View>(_ name: String, _ view: V, expectWidth: CGFloat) {
+    for (suffix, appearance) in [("light", NSAppearance.Name.aqua), ("dark", .darkAqua)] {
+        let host = NSHostingView(rootView: view.background(Color(nsColor: .windowBackgroundColor))
+            .environment(\.colorScheme, suffix == "dark" ? .dark : .light))
+        let size = host.fittingSize
+        print("\(name)-\(suffix) fitting size: \(size)")
+        if abs(size.width - expectWidth) > 0.5 { print("FAIL: \(name) width \(size.width) != \(expectWidth)"); exit(1) }
+        let window = NSWindow(contentRect: CGRect(origin: .zero, size: size), styleMask: [.titled],
+                              backing: .buffered, defer: false)
+        window.appearance = NSAppearance(named: appearance)
+        host.frame = CGRect(origin: .zero, size: size)
+        window.contentView = host
+        host.layoutSubtreeIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.6))
+        guard let rep = host.bitmapImageRepForCachingDisplay(in: host.bounds) else { continue }
+        host.cacheDisplay(in: host.bounds, to: rep)
+        try? rep.representation(using: .png, properties: [:])?.write(to: out.appendingPathComponent("\(name)-\(suffix).png"))
+    }
+}
+
 MainActor.assumeIsolated {
     _ = NSApplication.shared
     NSApp.setActivationPolicy(.accessory)
@@ -59,6 +82,7 @@ MainActor.assumeIsolated {
     let updater = Updater(app: app, matcher: .dmg, settings: settings, transport: OfflineTransport())
     Task { @MainActor in
         await updater.checkNow(userInitiated: true)
+        renderNatural("about-natural", AboutView(app: app, updater: updater), expectWidth: ShellTokens.Size.aboutWidth)
         render("about", size: CGSize(width: 440, height: 520), AboutView(app: app, updater: updater))
         render("whatsnew", size: CGSize(width: 480, height: 420),
                WhatsNewView(app: app, version: "1.5.0", transport: OfflineTransport()))

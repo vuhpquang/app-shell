@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.7 — 2026-11-15
+
+- Fix: the About window could collapse to ~170 pt wide (text wrapping per character) once the logo was added.
+  The content now has a fixed `aboutWidth`; the author footer is a centered column (logo, "Made by …", links)
+  whose lines never wrap. `AppShellPreview` renders About at its fitting size and fails unless it is exactly
+  `aboutWidth` wide (`about-natural-*.png`).
+
 ## 0.2.6 — 2026-11-15
 
 - The author logo in the footer is the small circle variant ("{VU} HA" without the tiny "HAHA", larger lettering),

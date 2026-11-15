@@ -12,7 +12,8 @@ import UpdaterKit
 ///      ✓ LaunchApp is up to date       [Check for Updates]
 ///   [What's New] [Report Issue]
 ///   ───────────────────────────────
-///   (logo) Made by Ha Phung Quang Vu
+///          (logo)
+///   Made by Ha Phung Quang Vu
 ///   vuhpquang.com · GitHub · LinkedIn · Source code
 ///   © 2026 Ha Phung Quang Vu
 public struct AboutView: View {
@@ -73,7 +74,7 @@ public struct AboutView: View {
             AuthorFooter(app: app)
         }
         .padding(ShellTokens.Spacing.xl)
-        .frame(maxWidth: ShellTokens.Size.aboutWidth)
+        .frame(width: ShellTokens.Size.aboutWidth)
         .tint(app.accent)
     }
 
@@ -96,13 +97,13 @@ public struct AuthorFooter: View {
 
     public var body: some View {
         VStack(spacing: ShellTokens.Spacing.xs) {
-            HStack(spacing: ShellTokens.Spacing.s) {
-                AuthorLogo()
-                HStack(spacing: ShellTokens.Spacing.xs) {
-                    Text("Made by").foregroundStyle(.secondary)
-                    Link(Author.name, destination: Author.website).fontWeight(.semibold)
-                }
+            AuthorLogo()
+            HStack(spacing: ShellTokens.Spacing.xs) {
+                Text("Made by").foregroundStyle(.secondary)
+                Link(Author.name, destination: Author.website).fontWeight(.semibold)
             }
+            .lineLimit(1)
+            .fixedSize()
             HStack(spacing: ShellTokens.Spacing.s) {
                 Link(destination: Author.website) { Text(verbatim: "vuhpquang.com") }
                 Text(verbatim: "·").foregroundStyle(.tertiary)
@@ -112,14 +113,20 @@ public struct AuthorFooter: View {
                 Text(verbatim: "·").foregroundStyle(.tertiary)
                 Link(destination: app.repoURL) { Text("Source code") }
             }
+            .lineLimit(1)
+            .fixedSize()
             ForEach(app.credits, id: \.name) { credit in
                 HStack(spacing: ShellTokens.Spacing.xs) {
                     Text(verbatim: credit.note).foregroundStyle(.secondary)
                     Link(credit.name, destination: credit.url)
                 }
+                .lineLimit(1)
+                .fixedSize()
             }
             Text(verbatim: app.copyright)
                 .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .fixedSize()
                 .padding(.top, ShellTokens.Spacing.xs)
         }
         .font(.callout)

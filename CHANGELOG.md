@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.6 — 2026-11-15
+
+- The author logo in the footer is the small circle variant ("{VU} HA" without the tiny "HAHA", larger lettering),
+  which reads at 32 pt. Same `Author.logoPNG` API, new embedded PNG.
+
 ## 0.2.5 — 2026-11-15
 
 - The author footer (About window and Settings → About) shows the author's circle logo ("{VU} HA") at

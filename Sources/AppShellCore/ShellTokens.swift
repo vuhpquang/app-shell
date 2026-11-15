@@ -17,6 +17,7 @@ public enum ShellTokens {
     public enum Size {
         public static let aboutIcon: CGFloat = 112
         public static let paneIcon: CGFloat = 72
+        public static let authorLogo: CGFloat = 32
         public static let aboutWidth: CGFloat = 420
         public static let whatsNewWidth: CGFloat = 480
         public static let whatsNewHeight: CGFloat = 420

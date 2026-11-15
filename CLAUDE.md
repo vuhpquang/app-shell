@@ -24,7 +24,8 @@ In an app's DEBUG build, `APPSHELL_PRETEND_VERSION=0.0.1` makes the updater see 
 
 ## Layout
 
-- `AppShellCore` — `Author` (the ONLY place the author's name, links and copyright format live),
+- `AppShellCore` — `Author` (the ONLY place the author's name, links, copyright format and logo live;
+  `Author.logoPNG` is base64 in `AuthorLogo.swift`, regenerate it from the portfolio's `public/brand/`),
   `AppIdentity` (per-app values: name, tagline, repo, first year, accent, credits, What's New mode),
   `Version`, `LaunchAtLogin`, `ShellTokens` (spacing/sizes; views use these, never literals).
 - `UpdaterKit` — `Release` + `AssetMatcher` (pure), `Updater` (`ObservableObject`, `@MainActor` state
@@ -39,7 +40,7 @@ In an app's DEBUG build, `APPSHELL_PRETEND_VERSION=0.0.1` makes the updater see 
   via the injectable `AppProcessControlling` (`ExternalInstaller(process:)`), so tests never touch real apps;
   a failed swap after a quit reopens the old copy). `Updater.unreachableMessage` names the update source;
   `AppIdentity.tagPrefix` ("v" default) for repos whose tags aren't `vX.Y.Z`; `WhatsNewWindow.show(transport:)`.
-- `AboutKit` — `AboutView`, `AuthorFooter`, `AboutWindow`, `UpdateStatusLabel`/`UpdateActionButton`,
+- `AboutKit` — `AboutView`, `AuthorFooter` (with `AuthorLogo`), `AboutWindow`, `UpdateStatusLabel`/`UpdateActionButton`,
   `WhatsNewTracker` (`appShell.lastSeenVersion`; silent first run), `WhatsNewView`/`WhatsNewWindow`,
   `ReleaseNotes` (Markdown → blocks).
 - `SettingsKit` — `SettingsShell` (app panes, then Updates + About), `SettingsShellStyle` (optional

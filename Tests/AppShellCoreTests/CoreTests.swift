@@ -14,6 +14,13 @@ final class AuthorTests: XCTestCase {
         XCTAssertEqual(Author.copyright(since: 2025, now: date(2026)), "© 2025–2026 Ha Phung Quang Vu")
     }
 
+    func testLogoIsAPNG() {
+        let png = Author.logoPNG
+        XCTAssertEqual(Array(png.prefix(8)), [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
+        // IHDR width/height (big-endian) at bytes 16...23: 256 × 256.
+        XCTAssertEqual(png[16..<24].map { $0 }, [0, 0, 1, 0, 0, 0, 1, 0])
+    }
+
     func testLinks() {
         XCTAssertEqual(Author.name, "Ha Phung Quang Vu")
         XCTAssertEqual(Author.website.absoluteString, "https://vuhpquang.com")

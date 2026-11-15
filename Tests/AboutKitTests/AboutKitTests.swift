@@ -59,3 +59,12 @@ final class ReleaseNotesTests: XCTestCase {
         XCTAssertEqual(ReleaseNotes.blocks(from: "  \n\n"), [])
     }
 }
+
+@MainActor
+final class AuthorLogoTests: XCTestCase {
+    func testLogoDecodes() {
+        let image = AuthorLogo.image
+        XCTAssertFalse(image.representations.isEmpty)
+        XCTAssertEqual(image.representations.first?.pixelsWide, 256)
+    }
+}

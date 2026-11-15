@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.5 — 2026-11-15
+
+- The author footer (About window and Settings → About) shows the author's circle logo ("{VU} HA") at
+  32 pt left of "Made by …"; it links to vuhpquang.com. The PNG is embedded as base64 in
+  `AppShellCore/AuthorLogo.swift` (`Author.logoPNG`), not a bundle resource, so the package still ships
+  no resources. New public view `AuthorLogo`, token `ShellTokens.Size.authorLogo`.
+
 ## 0.2.4 — 2026-11-15
 
 - `AppIdentity.updateSourceDescription`: the footer of Settings → Updates is a value. The default is

@@ -12,7 +12,7 @@ import UpdaterKit
 ///      ✓ LaunchApp is up to date       [Check for Updates]
 ///   [What's New] [Report Issue]
 ///   ───────────────────────────────
-///   Made by Ha Phung Quang Vu
+///   (logo) Made by Ha Phung Quang Vu
 ///   vuhpquang.com · GitHub · LinkedIn · Source code
 ///   © 2026 Ha Phung Quang Vu
 public struct AboutView: View {
@@ -96,9 +96,12 @@ public struct AuthorFooter: View {
 
     public var body: some View {
         VStack(spacing: ShellTokens.Spacing.xs) {
-            HStack(spacing: ShellTokens.Spacing.xs) {
-                Text("Made by").foregroundStyle(.secondary)
-                Link(Author.name, destination: Author.website).fontWeight(.semibold)
+            HStack(spacing: ShellTokens.Spacing.s) {
+                AuthorLogo()
+                HStack(spacing: ShellTokens.Spacing.xs) {
+                    Text("Made by").foregroundStyle(.secondary)
+                    Link(Author.name, destination: Author.website).fontWeight(.semibold)
+                }
             }
             HStack(spacing: ShellTokens.Spacing.s) {
                 Link(destination: Author.website) { Text(verbatim: "vuhpquang.com") }
@@ -121,4 +124,25 @@ public struct AuthorFooter: View {
         }
         .font(.callout)
     }
+}
+
+/// The author's circle logo, decoded once from `Author.logoPNG` (data in code, no bundle resource).
+/// It carries its own peach fill and brown ring, so it reads on light and dark backgrounds alike.
+public struct AuthorLogo: View {
+    let size: CGFloat
+
+    public init(size: CGFloat = ShellTokens.Size.authorLogo) { self.size = size }
+
+    public var body: some View {
+        Link(destination: Author.website) {
+            Image(nsImage: Self.image)
+                .resizable()
+                .interpolation(.high)
+                .frame(width: size, height: size)
+        }
+        .accessibilityLabel(Text(verbatim: Author.name))
+    }
+
+    /// 256 px source drawn at 32 pt: crisp at 1x and 2x.
+    @MainActor static let image: NSImage = NSImage(data: Author.logoPNG) ?? NSImage()
 }

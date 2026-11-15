@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 — 2026-11-15
+
+- `Installer.stage` (and so `ExternalInstaller.stage`) removes its work folder when it refuses or fails,
+  so a damaged or wrongly signed download leaves nothing in the temporary folder.
+
 ## 0.2.1 — 2026-11-15
 
 - `ExternalInstaller.replace`: when the swap fails after the running app was quit, the old copy is

@@ -173,3 +173,19 @@ final class ExternalInstallerHardeningTests: XCTestCase {
         XCTAssertTrue(control.opened.isEmpty)
     }
 }
+
+final class StageCleanupTests: XCTestCase {
+    private func workDirs() -> Set<String> {
+        let items = (try? FileManager.default.contentsOfDirectory(atPath: FileManager.default.temporaryDirectory.path)) ?? []
+        return Set(items.filter { $0.hasPrefix("AppShellUpdate-") })
+    }
+
+    func testRefusedStageLeavesNoWorkFolder() throws {
+        let bogus = FileManager.default.temporaryDirectory.appendingPathComponent("bogus-\(UUID().uuidString).zip")
+        try Data("not a zip".utf8).write(to: bogus)
+        defer { try? FileManager.default.removeItem(at: bogus) }
+        let before = workDirs()
+        XCTAssertThrowsError(try ExternalInstaller().stage(bogus, kind: .zip, bundleId: "x.y"))
+        XCTAssertEqual(workDirs().subtracting(before), [], "a refused download leaves nothing in the temp folder")
+    }
+}

@@ -37,7 +37,18 @@ public struct Installer: Installing {
         let fm = FileManager.default
         let work = fm.temporaryDirectory.appendingPathComponent("AppShellUpdate-\(UUID().uuidString)")
         try fm.createDirectory(at: work, withIntermediateDirectories: true)
+        do {
+            return try stage(file, kind: kind, bundleId: bundleId, requireOwnSigner: requireOwnSigner, in: work)
+        } catch {
+            // A refused or broken download leaves nothing behind (the disk image is already detached).
+            try? fm.removeItem(at: work)
+            throw error
+        }
+    }
 
+    private func stage(_ file: URL, kind: AssetMatcher.Kind, bundleId: String?, requireOwnSigner: Bool,
+                       in work: URL) throws -> URL {
+        let fm = FileManager.default
         let source: URL
         var detach: URL?
         switch kind {

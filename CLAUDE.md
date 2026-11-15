@@ -37,7 +37,8 @@ In an app's DEBUG build, `APPSHELL_PRETEND_VERSION=0.0.1` makes the updater see 
   `satisfies(_:requirement:)` / `designatedRequirement(of:)`, `@MainActor replace(target:with:relaunchArguments:quitTimeout:)`;
   it quits only a running app whose bundle is the target (`isSameBundle`: symlinks resolved, standardised),
   via the injectable `AppProcessControlling` (`ExternalInstaller(process:)`), so tests never touch real apps;
-  a failed swap after a quit reopens the old copy). `Updater.unreachableMessage` names the update source.
+  a failed swap after a quit reopens the old copy). `Updater.unreachableMessage` names the update source;
+  `AppIdentity.tagPrefix` ("v" default) for repos whose tags aren't `vX.Y.Z`; `WhatsNewWindow.show(transport:)`.
 - `AboutKit` — `AboutView`, `AuthorFooter`, `AboutWindow`, `UpdateStatusLabel`/`UpdateActionButton`,
   `WhatsNewTracker` (`appShell.lastSeenVersion`; silent first run), `WhatsNewView`/`WhatsNewWindow`,
   `ReleaseNotes` (Markdown → blocks).

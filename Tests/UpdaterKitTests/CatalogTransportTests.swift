@@ -35,3 +35,13 @@ final class CatalogTransportTests: XCTestCase {
         }
     }
 }
+
+final class CatalogTagTests: XCTestCase {
+    func testWhatsNewTagMatchesWithAnyPrefix() {
+        let release = Release(tagName: "v0.1.0", body: nil, publishedAt: nil, assets: [])
+        XCTAssertTrue(CatalogTransport.matches(tag: "v0.1.0", release))
+        XCTAssertTrue(CatalogTransport.matches(tag: "macos-v0.1.0", release))
+        XCTAssertFalse(CatalogTransport.matches(tag: "macos-v0.1.1", release))
+        XCTAssertFalse(CatalogTransport.matches(tag: "v0.1", release))
+    }
+}

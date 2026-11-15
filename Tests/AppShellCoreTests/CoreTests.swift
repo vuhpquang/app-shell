@@ -51,5 +51,14 @@ final class AppIdentityTests: XCTestCase {
         XCTAssertEqual(app.releaseURL(tag: "v1.2.0").absoluteString,
                        "https://github.com/vuhpquang/launch-app/releases/tag/v1.2.0")
         XCTAssertEqual(app.whatsNew, .menuItem)
+        XCTAssertEqual(app.releaseURL(version: "1.2.0").absoluteString,
+                       "https://github.com/vuhpquang/launch-app/releases/tag/v1.2.0")
+    }
+
+    func testTagPrefixForMultiPlatformRepos() {
+        var app = AppIdentity(name: "App Depot", tagline: "t", repo: "vuhpquang/app-depot", firstYear: 2026)
+        app.tagPrefix = "macos-v"
+        XCTAssertEqual(app.releaseURL(version: "0.1.0").absoluteString,
+                       "https://github.com/vuhpquang/app-depot/releases/tag/macos-v0.1.0")
     }
 }

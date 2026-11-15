@@ -78,7 +78,7 @@ public struct WhatsNewView: View {
                 .padding(.vertical, ShellTokens.Spacing.xs)
             }
             HStack {
-                Button { openURL(app.releaseURL(tag: "v\(version)")) } label: { Text("View on GitHub") }
+                Button { openURL(app.releaseURL(version: version)) } label: { Text("View on GitHub") }
                 Spacer()
                 Button { dismiss(); NSApp.keyWindow?.performClose(nil) } label: { Text("Done") }
                     .keyboardShortcut(.defaultAction)
@@ -90,7 +90,7 @@ public struct WhatsNewView: View {
         .tint(app.accent)
         .task {
             do {
-                let release = try await transport.release(repo: app.repo, tag: "v\(version)", userAgent: "\(app.name)/\(app.version)")
+                let release = try await transport.release(repo: app.repo, tag: app.tagPrefix + version, userAgent: "\(app.name)/\(app.version)")
                 load = .loaded(release.body ?? "")
             } catch {
                 load = .failed
@@ -104,10 +104,12 @@ public struct WhatsNewView: View {
 public enum WhatsNewWindow {
     private static let host = ShellWindow()
 
-    public static func show(app: AppIdentity, version: String, tracker: WhatsNewTracker? = nil) {
+    /// `transport` = where the notes come from (catalog apps pass their `CatalogTransport`).
+    public static func show(app: AppIdentity, version: String, tracker: WhatsNewTracker? = nil,
+                            transport: UpdateTransport = URLSessionTransport()) {
         tracker?.markSeen()
         host.show(title: String(localized: "What's New")) {
-            WhatsNewView(app: app, version: version)
+            WhatsNewView(app: app, version: version, transport: transport)
         }
     }
 }

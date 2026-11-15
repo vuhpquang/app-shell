@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.3 — 2026-11-15
+
+- `AppIdentity.tagPrefix` (default "v") and `releaseURL(version:)`: What's New's "View on GitHub" and its
+  notes lookup use `<tagPrefix><version>`, so a repo with several apps (App Depot: `macos-v`) links right.
+- `WhatsNewWindow.show(…, transport:)`: catalog apps load the notes from their `CatalogTransport`, which now
+  matches a tag by its version part (`macos-v0.1.0` ↔ catalog `v0.1.0`).
+
 ## 0.2.2 — 2026-11-15
 
 - `Installer.stage` (and so `ExternalInstaller.stage`) removes its work folder when it refuses or fails,

@@ -19,8 +19,14 @@ public struct CatalogTransport: UpdateTransport {
     /// What's New asks for the running version's notes: the catalog only knows the latest one.
     public func release(repo: String, tag: String, userAgent: String) async throws -> Release {
         let latest = try await fetch(userAgent: userAgent)
-        guard latest.tagName == tag else { throw UpdateError("No release notes for \(tag)") }
+        guard Self.matches(tag: tag, latest) else { throw UpdateError("No release notes for \(tag)") }
         return latest
+    }
+
+    /// The catalog's release is `v<version>`; the app may ask with its own tag prefix (`macos-v0.1.0`).
+    static func matches(tag: String, _ release: Release) -> Bool {
+        func version(_ t: String) -> Substring { t.drop { !$0.isNumber } }
+        return version(tag) == version(release.tagName)
     }
 
     public func download(_ url: URL) async throws -> URL {

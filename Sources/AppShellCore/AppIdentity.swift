@@ -38,6 +38,9 @@ public struct AppIdentity: Sendable {
     public var whatsNew: WhatsNewMode
     /// The bundle to read version and icon from (the app's main bundle).
     public var bundleURL: URL
+    /// Release tags are `<tagPrefix><version>`: "v" by default; a repo with several apps uses its own
+    /// (App Depot: "macos-v").
+    public var tagPrefix: String = "v"
 
     public init(name: String, tagline: String, repo: String, firstYear: Int, accent: Color? = nil,
                 credits: [Credit] = [], whatsNew: WhatsNewMode = .menuItem, bundleURL: URL = Bundle.main.bundleURL) {
@@ -63,6 +66,8 @@ public struct AppIdentity: Sendable {
     public var releasesURL: URL { repoURL.appendingPathComponent("releases") }
     public var newIssueURL: URL { repoURL.appendingPathComponent("issues/new") }
     public func releaseURL(tag: String) -> URL { releasesURL.appendingPathComponent("tag/\(tag)") }
+    /// The GitHub release page of `version` (`<tagPrefix><version>`).
+    public func releaseURL(version: String) -> URL { releaseURL(tag: tagPrefix + version) }
 
     public var copyright: String { Author.copyright(since: firstYear) }
 }

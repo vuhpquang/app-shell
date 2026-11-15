@@ -32,6 +32,11 @@ In an app's DEBUG build, `APPSHELL_PRETEND_VERSION=0.0.1` makes the updater see 
   requirement, detached swap script), `UpdateTransport` (URLSession; fakes in tests),
   `UpdateSettingsStore` (apps adapt their own storage so keys never change; `UserDefaultsUpdateSettings`
   for new apps: `appShell.updates.autoCheck/autoInstall`).
+- `UpdaterKit` also has `CatalogTransport(catalogURL:slug:)` (update source = the vuhpquang.com catalog
+  instead of GitHub) and `ExternalInstaller` (install/replace OTHER apps: `stage`, static
+  `satisfies(_:requirement:)` / `designatedRequirement(of:)`, `@MainActor replace(target:with:relaunchArguments:quitTimeout:)`;
+  it quits only a running app whose `bundleURL` equals the target, via the injectable
+  `AppProcessControlling`, so tests never touch real apps).
 - `AboutKit` — `AboutView`, `AuthorFooter`, `AboutWindow`, `UpdateStatusLabel`/`UpdateActionButton`,
   `WhatsNewTracker` (`appShell.lastSeenVersion`; silent first run), `WhatsNewView`/`WhatsNewWindow`,
   `ReleaseNotes` (Markdown → blocks).

@@ -28,6 +28,12 @@ public struct Installer: Installing {
     }
 
     public func stage(_ file: URL, kind: AssetMatcher.Kind, bundleId: String?) throws -> URL {
+        try stage(file, kind: kind, bundleId: bundleId, requireOwnSigner: true)
+    }
+
+    /// `requireOwnSigner: false` is for installing OTHER apps (`ExternalInstaller`): their signer is
+    /// checked against the catalog's requirement instead of this copy's designated requirement.
+    func stage(_ file: URL, kind: AssetMatcher.Kind, bundleId: String?, requireOwnSigner: Bool) throws -> URL {
         let fm = FileManager.default
         let work = fm.temporaryDirectory.appendingPathComponent("AppShellUpdate-\(UUID().uuidString)")
         try fm.createDirectory(at: work, withIntermediateDirectories: true)
@@ -65,7 +71,7 @@ public struct Installer: Installing {
         } catch {
             throw UpdateError("The update's signature is invalid")
         }
-        guard Self.satisfiesOwnSigner(newApp) else {
+        guard !requireOwnSigner || Self.satisfiesOwnSigner(newApp) else {
             throw UpdateError("The update isn't signed by the same developer")
         }
 

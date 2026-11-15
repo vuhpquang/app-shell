@@ -23,6 +23,13 @@ public struct Release: Decodable, Sendable, Equatable {
     public let publishedAt: Date?
     public let assets: [Asset]
 
+    public init(tagName: String, body: String?, publishedAt: Date?, assets: [Asset]) {
+        self.tagName = tagName
+        self.body = body
+        self.publishedAt = publishedAt
+        self.assets = assets
+    }
+
     enum CodingKeys: String, CodingKey {
         case tagName = "tag_name"
         case body

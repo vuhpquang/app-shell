@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 — 2026-11-15
+
+- `CatalogTransport`: an `UpdateTransport` that reads the latest release of one app from the
+  vuhpquang.com catalog (`/api/depot/catalog`) by slug (used by the App Depot to update itself).
+- `ExternalInstaller`: install or update OTHER apps — `stage` (bundle id + `codesign --strict`),
+  `satisfies(_:requirement:)`, `designatedRequirement(of:)` and an in-process `replace` that quits only
+  the exact running bundle (`AppProcessControlling`, injectable), swaps it and reopens it.
+- `Release` has a public memberwise init; `Installer.stage` got an internal `requireOwnSigner` switch
+  (default behaviour unchanged).
+
 ## 0.1.1 — 2026-11-14
 
 - No resource bundles any more: SwiftPM-built apps (LaunchApp, Padlet) don't ship them, so

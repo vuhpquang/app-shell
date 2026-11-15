@@ -73,6 +73,13 @@ final class UpdaterTests: XCTestCase {
         XCTAssertEqual(u.state, .failed("Couldn't reach GitHub. Check your connection and try again"))
     }
 
+    func testUnreachableMessageIsPerSource() async {
+        let u = updater(FakeTransport(error: URLError(.notConnectedToInternet)))
+        u.unreachableMessage = "Couldn't reach vuhpquang.com. Check your connection and try again"
+        await u.checkNow(userInitiated: true)
+        XCTAssertEqual(u.state, .failed("Couldn't reach vuhpquang.com. Check your connection and try again"))
+    }
+
     func testBackgroundCheckKeepsVisibleAvailable() async {
         var transport = FakeTransport(release: release)
         let u = updater(transport)

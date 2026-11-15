@@ -35,8 +35,9 @@ In an app's DEBUG build, `APPSHELL_PRETEND_VERSION=0.0.1` makes the updater see 
 - `UpdaterKit` also has `CatalogTransport(catalogURL:slug:)` (update source = the vuhpquang.com catalog
   instead of GitHub) and `ExternalInstaller` (install/replace OTHER apps: `stage`, static
   `satisfies(_:requirement:)` / `designatedRequirement(of:)`, `@MainActor replace(target:with:relaunchArguments:quitTimeout:)`;
-  it quits only a running app whose `bundleURL` equals the target, via the injectable
-  `AppProcessControlling`, so tests never touch real apps).
+  it quits only a running app whose bundle is the target (`isSameBundle`: symlinks resolved, standardised),
+  via the injectable `AppProcessControlling` (`ExternalInstaller(process:)`), so tests never touch real apps;
+  a failed swap after a quit reopens the old copy). `Updater.unreachableMessage` names the update source.
 - `AboutKit` — `AboutView`, `AuthorFooter`, `AboutWindow`, `UpdateStatusLabel`/`UpdateActionButton`,
   `WhatsNewTracker` (`appShell.lastSeenVersion`; silent first run), `WhatsNewView`/`WhatsNewWindow`,
   `ReleaseNotes` (Markdown → blocks).

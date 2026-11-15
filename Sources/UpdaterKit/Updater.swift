@@ -46,6 +46,8 @@ public final class Updater: ObservableObject {
     public var onWillRelaunch: (@MainActor () -> Void)?
     /// Arguments the new copy is opened with (LaunchApp: `["--background"]` when it was started so).
     public var relaunchArguments: [String] = []
+    /// Shown when a check the user asked for can't reach the update source (catalog apps name their server).
+    public var unreachableMessage = "Couldn't reach GitHub. Check your connection and try again"
 
     var transport: UpdateTransport
     let installer: Installing
@@ -138,7 +140,7 @@ public final class Updater: ObservableObject {
         } catch {
             lastChecked = Date()
             // A failed background check stays quiet; the user only sees errors they asked for.
-            state = userInitiated ? .failed("Couldn't reach GitHub. Check your connection and try again") : previous
+            state = userInitiated ? .failed(unreachableMessage) : previous
         }
     }
 

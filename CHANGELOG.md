@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.1 — 2026-11-15
+
+- `ExternalInstaller.replace`: when the swap fails after the running app was quit, the old copy is
+  reopened (with the relaunch arguments) before the error is thrown.
+- Running-app matching is one pure function, `ExternalInstaller.isSameBundle(_:_:)`: both sides are
+  compared with `resolvingSymlinksInPath().standardizedFileURL`; a copy with the same name elsewhere never
+  matches. `ExternalInstaller(process:)` is public so apps can test with a fake controller.
+- `Updater.unreachableMessage`: the error for a failed user check (catalog apps name their server
+  instead of GitHub). Default unchanged.
+
 ## 0.2.0 — 2026-11-15
 
 - `CatalogTransport`: an `UpdateTransport` that reads the latest release of one app from the

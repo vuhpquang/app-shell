@@ -12,14 +12,14 @@ public protocol AppProcessControlling {
     func open(_ app: URL, arguments: [String]?)
 }
 
-/// `NSWorkspace` implementation: matches running apps by their standardised bundle URL, never by name or bundle id.
+/// `NSWorkspace` implementation: matches running apps by their bundle path (`ExternalInstaller.isSameBundle`),
+/// never by name or bundle id.
 @MainActor
 public struct WorkspaceAppProcessControl: AppProcessControlling {
     public init() {}
 
     private func matches(_ bundleURL: URL) -> [NSRunningApplication] {
-        let wanted = bundleURL.standardizedFileURL
-        return NSWorkspace.shared.runningApplications.filter { $0.bundleURL?.standardizedFileURL == wanted }
+        NSWorkspace.shared.runningApplications.filter { ExternalInstaller.isSameBundle($0.bundleURL, bundleURL) }
     }
 
     public func isRunning(bundleURL: URL) -> Bool {
@@ -50,7 +50,18 @@ public struct ExternalInstaller {
 
     public init() { process = nil }
 
-    init(process: AppProcessControlling) { self.process = process }
+    /// Inject a fake in tests so they never quit or open real apps.
+    public init(process: AppProcessControlling) { self.process = process }
+
+    /// True only when `running` is the very bundle at `target` (symlinks resolved, `.`/`..` and trailing
+    /// slashes removed). A copy with the same name or bundle id at another path never matches.
+    public static func isSameBundle(_ running: URL?, _ target: URL) -> Bool {
+        guard let running, running.isFileURL, target.isFileURL else { return false }
+        func canonical(_ url: URL) -> String {
+            url.resolvingSymlinksInPath().standardizedFileURL.path
+        }
+        return canonical(running) == canonical(target)
+    }
 
     /// Unpacks the download and verifies the app inside: expected bundle id and
     /// `codesign --verify --deep --strict`. The caller then checks the catalog signer with `satisfies`.
@@ -114,6 +125,8 @@ public struct ExternalInstaller {
             }
         } catch {
             try? fm.removeItem(at: temp)
+            // The old copy was quit for the swap: bring it back so the user isn't left without it.
+            if wasRunning, fm.fileExists(atPath: target.path) { control.open(target, arguments: relaunchArguments) }
             throw UpdateError("Couldn't replace \(target.lastPathComponent): \(error.localizedDescription)")
         }
 

@@ -109,3 +109,67 @@ final class ExternalInstallerTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: target.appendingPathComponent("Contents/marker.txt").path))
     }
 }
+
+final class ExternalInstallerHardeningTests: XCTestCase {
+    private func tempDir() throws -> URL {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("ExtInstHard-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        addTeardownBlock { try? FileManager.default.removeItem(at: dir) }
+        return dir
+    }
+
+    func testBundleMatchSamePath() {
+        let target = URL(fileURLWithPath: "/Applications/Padlet.app")
+        XCTAssertTrue(ExternalInstaller.isSameBundle(URL(fileURLWithPath: "/Applications/Padlet.app/"), target))
+        XCTAssertTrue(ExternalInstaller.isSameBundle(URL(fileURLWithPath: "/Applications/./Padlet.app"), target))
+    }
+
+    func testSameNameElsewhereDoesNotMatch() {
+        let target = URL(fileURLWithPath: "/tmp/root/Padlet.app")
+        XCTAssertFalse(ExternalInstaller.isSameBundle(URL(fileURLWithPath: "/Applications/Padlet.app"), target))
+        XCTAssertFalse(ExternalInstaller.isSameBundle(URL(fileURLWithPath: "/tmp/root/Padlet 2.app"), target))
+        XCTAssertFalse(ExternalInstaller.isSameBundle(nil, target))
+    }
+
+    func testSymlinkedPathMatches() throws {
+        let dir = try tempDir()
+        let real = dir.appendingPathComponent("real")
+        try FileManager.default.createDirectory(at: real.appendingPathComponent("A.app"), withIntermediateDirectories: true)
+        let link = dir.appendingPathComponent("link")
+        try FileManager.default.createSymbolicLink(at: link, withDestinationURL: real)
+        XCTAssertTrue(ExternalInstaller.isSameBundle(link.appendingPathComponent("A.app"), real.appendingPathComponent("A.app")))
+        XCTAssertTrue(ExternalInstaller.isSameBundle(real.appendingPathComponent("A.app"), link.appendingPathComponent("A.app")))
+    }
+
+    @MainActor
+    func testFailedSwapAfterQuitReopensTheOldApp() async throws {
+        let dir = try tempDir()
+        let target = dir.appendingPathComponent("Target.app")
+        try FileManager.default.createDirectory(at: target.appendingPathComponent("Contents"), withIntermediateDirectories: true)
+        let missingStaged = dir.appendingPathComponent("Missing.app")   // ditto fails → swap fails
+        let control = FakeControl(running: true)
+        do {
+            _ = try await ExternalInstaller(process: control)
+                .replace(target: target, with: missingStaged, relaunchArguments: ["--background"], quitTimeout: .seconds(1))
+            XCTFail("expected a throw")
+        } catch {}
+        XCTAssertEqual(control.terminated, [target])
+        XCTAssertEqual(control.opened.first?.0, target, "the old copy is reopened")
+        XCTAssertEqual(control.opened.first?.1, ["--background"])
+        XCTAssertTrue(FileManager.default.fileExists(atPath: target.path))
+    }
+
+    @MainActor
+    func testFailedSwapWhenNotRunningOpensNothing() async throws {
+        let dir = try tempDir()
+        let target = dir.appendingPathComponent("Target.app")
+        try FileManager.default.createDirectory(at: target, withIntermediateDirectories: true)
+        let control = FakeControl(running: false)
+        do {
+            _ = try await ExternalInstaller(process: control)
+                .replace(target: target, with: dir.appendingPathComponent("Missing.app"), relaunchArguments: nil, quitTimeout: .seconds(1))
+            XCTFail("expected a throw")
+        } catch {}
+        XCTAssertTrue(control.opened.isEmpty)
+    }
+}
